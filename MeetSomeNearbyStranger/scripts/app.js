@@ -1,21 +1,21 @@
-(function (global) {
-    var mobileSkin = "",
-        app = global.app = global.app || {};
+var app = app || {};
 
+(function () {
     document.addEventListener("deviceready", function () {
-        app.application = new kendo.mobile.Application(document.body, { layout: "tabstrip-layout" });
-    }, false);
-
-    app.changeSkin = function (e) {
-        if (e.sender.element.text() === "Flat") {
-            e.sender.element.text("Native");
-            mobileSkin = "flat";
+        
+        app.application = new kendo.mobile.Application(document.body);
+        app.servicesBaseUrl = "http://localhost:63716/api/";
+        
+        var storage = window.localStorage;
+        storage.clear();
+        var isInitializingComplete = storage.getItem("isInitializingComplete");
+        if (isInitializingComplete){
+            $("#register-user-view").css("display", "none");
+            $("#after-initial-view").css("display", "block");
         }
-        else {
-            e.sender.element.text("Flat");
-            mobileSkin = "";
+        else
+        {
+            
         }
-
-        app.application.skin(mobileSkin);
-    };
-})(window);
+    }, false)
+}());
