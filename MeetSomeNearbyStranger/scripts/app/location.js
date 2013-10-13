@@ -6,6 +6,8 @@
 
     LocationViewModel = kendo.data.ObservableObject.extend({
         _lastMarker: null,
+        markers: [],
+        infoWindows: [],
         _isLoading: false,
         address: "",
 
@@ -20,10 +22,34 @@
                 function (position) {
                     position = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
                     map.panTo(position);
-                    that._putMarker(position);
-
-                    that._isLoading = false;
-                    that.hideLoading();
+                    that._putMarker({
+                        position: position,
+                        name: "Me",
+                        img: "styles/images/person-clip-art-2.png"
+                    });
+                    
+                    window.httpRequester.getJSON(app.servicesBaseUrl + "users/getusersshortview?phoneID=" + device.uuid).then(function(data){
+                        for (var i = 0; i < data.length; i++){
+                            var image = "styles/images/person-clip-art-2.png";
+                            if (data[i].profileImage){
+                                image = data[i].profileImage;
+                            }
+                            that._putMarker({
+                                position: new google.maps.LatLng(data[i].latitude, data[i].longitude),
+                                name: data[i].nickname,
+                                img: image,
+                                id: data[i].id
+                            });
+                        }
+                        that._isLoading = false;
+                        that.hideLoading();
+                    }, function(error){
+                        navigator.notification.alert("Unable to find any people online. Check your interner connection.",
+                        function () { }, "Finding users failed", 'OK');
+                        
+                        that._isLoading = false;
+                        that.hideLoading();
+                    });
                 },
                 function (error) {
                     //default map coordinates                    
@@ -37,8 +63,7 @@
                         function () { }, "Location failed", 'OK');
                 },
                 {
-                    timeout: 30000,
-                    enableHighAccuracy: true
+                    timeout: 30000
                 }
             );
         },
@@ -73,16 +98,29 @@
             app.application.hideLoading();
         },
 
-        _putMarker: function (position) {
+        _putMarker: function (myMarker) {
             var that = this;
 
-            if (that._lastMarker !== null && that._lastMarker !== undefined) {
-                that._lastMarker.setMap(null);
-            }
-
-            that._lastMarker = new google.maps.Marker({
+            var marker = new google.maps.Marker({
                 map: map,
-                position: position
+                position: myMarker.position
+            });
+            
+            var contentString =
+                '<div id="content">' +
+                    '<h3 style="color:black;">' + myMarker.name + '</h3>' +
+                    '<img src="' + myMarker.img + '" width="50px" height="50px"/>';
+            if (myMarker.name != "Me"){
+                contentString += '<button onclick="goToDetails(\'' + myMarker.id + '\')" style="color:black; display:block;">View</button>';
+            }
+            contentString += '</div>';
+
+            var infowindow = new google.maps.InfoWindow({
+                content: contentString
+            });
+
+            google.maps.event.addListener(marker, 'click', function() {
+                infowindow.open(map, marker);
             });
         }
     });

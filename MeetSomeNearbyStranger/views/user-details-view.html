@@ -1,9 +1,30 @@
-<!DOCTYPE html>
-
-<html>
-    <head>
-        <title></title>
-    </head>
-    <body>
-    </body>
-</html>
+<div data-role="view" id="user-details-view" data-id="user-details-view"
+     data-layout="main-layout" data-title="Detailed info" data-model="app.detailsService.viewModel"
+     data-show="app.detailsService.init">
+    <div id="users-details">
+        <img style="display:inline;" id="profile-image" data-bind="attr: { src: profileImageUrl }" height="150px" width="150px" />
+        <a data-role="button" data-bind="click: meet, invisible: meetRequestSend">Meet</a>
+        <span style="display:block;" data-bind="visible: meetRequestSend">
+            Status:
+            <span data-bind="text: status"></span>
+        </span>
+        <span style="display:block;">
+            Nickname:
+            <span data-bind="text: nickname"></span>
+        </span>
+        <div>
+            Age:
+            <span data-bind="text: age"></span>
+        </div>
+        <div>
+            Gender:
+            <span data-bind="text: gender"></span>
+        </div>
+        <div>
+            Contacts:
+            <span data-bind="text: meets"></span>
+        </div>
+        <h2>Interests:</h2>
+        <ul id="interests-list-view" data-role="listview" data-bind="source: interests" data-style="inset" data-template="interest-template"></ul>
+    </div>
+</div>

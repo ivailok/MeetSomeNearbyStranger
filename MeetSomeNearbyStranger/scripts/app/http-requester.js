@@ -6,7 +6,7 @@ window.httpRequester = (function(){
                 type: "GET",
                 dataType: "json",
                 contentType: "application/json",
-                timeout: 5000,
+                timeout: 10000,
                 success: function(data){
                     resolve(data);
                 },
@@ -24,7 +24,27 @@ window.httpRequester = (function(){
                url: url,
                type: "POST",
                dataType: "json",
-               data: requestData,
+               data: JSON.stringify(requestData),
+               contentType: "application/json",
+               timeout: 10000,
+               success: function(data){
+                   resolve(data);
+               },
+               error: function(err){
+                   reject(err);
+               }
+           });
+        });
+        return promise;
+    }
+    
+    function putJSON(url, requestData){
+        var promise = new RSVP.Promise(function(resolve, reject){
+           $.ajax({
+               url: url,
+               type: "PUT",
+               dataType: "json",
+               data: JSON.stringify(requestData),
                contentType: "application/json",
                timeout: 5000,
                success: function(data){
@@ -40,6 +60,7 @@ window.httpRequester = (function(){
     
     return {
         getJSON: getJSON,
-        postJSON: postJSON
+        postJSON: postJSON,
+        putJSON: putJSON
     };    
 }());

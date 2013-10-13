@@ -14,37 +14,52 @@ var app = app || {};
     }
     
     var viewModel = kendo.observable({
-        years: getYears(),
-        
-        year: 2013, 
-     
-        // the values are bound to the merchant and amount fields
-        nickname: null,
-        gender: [ { name: "Male", value: "Male" }, { name: "Female", value: "Female" } ],
+        years: getYears(),    
+        year: "2013",         nickname: "",
+        genders: [ { name: "Male", value: "Male" }, { name: "Female", value: "Female" } ],
+        gender: "Male",
+        errorMessage: "",
         
         // event execute on click of add button
+        
         create: function(e) {
             cordovaExt.getLocation().then(function (position) {
-                var userData = { 
-                    phoneID: device.uuid,
-                    age: new Date().getFullYear() - parseInt(this.get("year")), 
-                    nickname: this.get("nickname"), 
-                    gender: this.get("gender"),
+                var age = (new Date()).getFullYear() - parseInt(viewModel.get("year"));
+                var uuid = device.uuid;
+                
+                var userData = {
+                    phoneID: uuid,
+                    age: age,
+                    nickname: viewModel.get("nickname"), 
+                    gender: viewModel.get("gender"),
                     latitude: position.coords.latitude,
                     longitude: position.coords.longitude
                 };
-                httpRequest.postJSON(app.servicesBaseUrl  + "users/senduserdata", userData)
+                window.httpRequester.postJSON(app.servicesBaseUrl  + "users/senduserdata", userData).then(function (){
+                    // reset the form
+                    viewModel.set("year", "2013");
+                    viewModel.set("nickname", "");
+                    viewModel.set("gender", "Male");
+                    
+                    var storage = window.localStorage;
+                    storage.setItem("isInitializingComplete", "true");
+                                        
+                    app.application.navigate("views/profile-view.html#profile-view");
+                }, function (error) {
+                    viewModel.set("errorMessage", error.message);
+                    viewModel.set("errorMessage", error.message);
+                    navigator.notification.alert(error.message,
+                            function () { }, "Registering user failed", 'OK');
+                });
             }, function (error){
-                
+                viewModel.set("errorMessage", error.message);
+                navigator.notification.alert(error.message,
+                        function () { }, "Registering user failed", 'OK');
             });
-            
-            // add the items to the array of expenses
-            
-            
-            // reset the form
-            this.set("expenseType", "food");
-            this.set("merchant", "");
-            this.set("amount", "");
         }
     });
+    
+    app.registerService = {
+        viewModel: viewModel
+    }
 }(app));

@@ -1,0 +1,8 @@
+<div data-role="view" id="meets-list-view" data-id="meets-list-view"
+     data-layout="main-layout" data-title="Meets" data-model="app.meetsService.viewModel"
+     data-show="app.meetsService.init">
+    <div id="meets-list">
+        <p data-bind="visible:noMeets">You don't have meets so far.</p>
+        <ul id="meets-container" data-role="listview" data-bind="{source: meets, click: listViewItemClick}" data-template="meets-list-template" data-style="inset"></ul>
+    </div>
+</div>

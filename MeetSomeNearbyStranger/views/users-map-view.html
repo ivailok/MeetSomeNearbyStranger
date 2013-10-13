@@ -1,3 +1,25 @@
-<div data-role="view" id="users-map-view" data-id="users-map-view"
-     data-layout="main-layout" data-title="People on map">
+<div id="users-map-view"
+     data-role="view"
+     data-id="users-map-view"
+     data-layout="main-layout" 
+     data-title="People on map"
+     data-init="app.locationService.initLocation" 
+     data-show="app.locationService.show" 
+     data-hide="app.locationService.hide" 
+     data-model="app.locationService.viewModel" 
+     data-stretch="true">
+    <div id="map-search-wrap">
+        <a data-role="button" id="map-navigate-home" data-bind="click: onNavigateHome"></a>
+        <form onsubmit="return false;">
+            <input id="map-address" type="search" data-bind="value: address" placeholder="Address"/>
+            <input id="map-search" type="submit" value="" data-bind="click: onSearchAddress" />
+        </form>
+        <script>
+            function goToDetails(id){
+                app.currentProfileId = id;
+                app.application.navigate("views/user-details-view.html#user-details-view");
+            }
+        </script>
+    </div>
+    <div id="map-canvas"></div>
 </div>

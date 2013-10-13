@@ -1,5 +1,8 @@
 <div data-role="view" id="users-list-view" data-id="users-list-view"
-     data-layout="main-layout" data-title="Nearby people">
+     data-layout="main-layout" data-title="Nearby people" data-model="app.listService.viewModel"
+     data-show="app.listService.init">
     <div id="users-list">
+        <p data-bind="visible:noPeopleFound">No people were found online</p>
+        <ul id="users-container" data-role="listview" data-bind="{source: users, click: listViewItemClick}" data-template="simple-list-template" data-style="inset"></ul>
     </div>
 </div>

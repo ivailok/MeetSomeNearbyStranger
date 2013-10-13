@@ -1,9 +1,36 @@
-<!DOCTYPE html>
-
-<html>
-    <head>
-        <title></title>
-    </head>
-    <body>
-    </body>
-</html>
+<div data-role="view" id="profile-view" data-id="profile-view"
+     data-layout="main-layout" data-title="Profile" data-model="app.profileService.viewModel"
+     data-show="app.profileService.init">
+    <div id="profile-data">
+        <img id="profile-image" style="display:block" data-bind="attr: { src: imageUrl }" height="150px" width="150px" />
+        <a data-role="button" data-bind="events: {click: useExistingPhoto}">Upload photo</a>
+        <a data-role="button" data-bind="events: {click: takePhoto}">Capture photo</a>
+        <span style="display:block;">
+            Nickname:
+            <span data-bind="text: nickname"></span>
+            <button data-bind="click: editNickname">Edit</button>
+        </span>
+        <span id="editNicknameField" style="display:block;" data-bind="visible:isOpenForEditing">
+            <input type="text" class="k-input" data-bind="value: newNickname"/>
+            <button data-bind="click: changeNickname">Save</button>
+        </span>
+        <div>
+            Age:
+            <span data-bind="text: age"></span>
+        </div>
+        <div>
+            Gender:
+            <span data-bind="text: gender"></span>
+        </div>
+        <div>
+            Contacts:
+            <span data-bind="text: meets"></span>
+        </div>
+        <h2>Interests:</h2>
+        <div>
+            <input type="text" class="k-input" data-bind="value: newInterest"/>
+            <button data-bind="click: addInterest">Add</button>
+        </div>
+        <ul id="interests-list-view" data-role="listview" data-bind="source: interests" data-template="interest-template" data-style="inset"></ul>
+    </div>
+</div>

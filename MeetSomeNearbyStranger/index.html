@@ -5,6 +5,7 @@
         <meta charset="utf-8" />
         <link href="kendo/styles/kendo.mobile.all.min.css" rel="stylesheet" />
         <link href="styles/main.css" rel="stylesheet" />
+        <link href="styles/extended.css" rel="stylesheet" />
 
         <script src="cordova.js"></script>
         <script src="kendo/js/jquery.min.js"></script>
@@ -12,44 +13,41 @@
         <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true"></script>
         <script src="scripts/libs/rsvp.min.js"></script>
 
+        <script src="scripts/app.js"></script>
         <script src="scripts/app/http-requester.js"></script>
         <script src="scripts/app/extensions.js"></script>
-        <script src="scripts/location.js"></script>
+        <script src="scripts/app/location.js"></script>
         <script src="scripts/app/register-user.js"></script>
-        <script src="scripts/app.js"></script>
-
+        <script src="scripts/app/profile.js"></script>
+        <script src="scripts/app/users-list.js"></script>
+        <script src="scripts/app/user-details.js"></script>
+        <script src="scripts/app/meets-list.js"></script>
+        <script src="scripts/app/meet-details.js"></script>
     </head>
     <body>
         <!--Home-->
-        <div id="home-view" data-id="home-view" data-role="view"
-             data-layout="main-layout" data-title="Home">
-            <div>
-                <div id="register-user-view" style="display:block" data-role="view" data-id="register-user-view">
-                    <div class="form" >
-                        <dl>
-                            <dt>Year</dt>
-                            <dd>
-                                <select data-role="dropdownlist" data-bind="source: years, value: year" data-text-field="name" data-value-field="value" ></select>
-                            </dd>
-                            <dt>Nickname</dt>
-                            <dd>
-                                <input id="nickname" type="text" class='k-textbox' data-bind="value: nickname" />
-                            </dd>
-                            <dt>Gender</dt>
-                            <dd>
-                                <select data-role="dropdownlist" data-bind="source: genders, value: gender" data-text-field="name" data-value-field="value" ></select>
-                            </dd>
-                        </dl>
-                        <dt>&nbsp;</dt>
-                        <dd>
-                            <button id="create" data-bind="click: create" class="k-button">Add</button>
-                        </dd>
-                    </div>
-                </div>
-                <div id="after-initial-view" style="display:none">Alternative</div>
-            </div>
+        <div id="register-user-view" data-id="register-user-view" data-role="view"
+             data-title="Home" data-model="app.registerService.viewModel">
+             <dl>
+                 <dt>Year</dt>
+                 <dd>
+                     <select data-role="dropdownlist" data-bind="source: years, value: year" data-text-field="name" data-value-field="value" ></select>
+                 </dd>
+                 <dt>Nickname</dt>
+                 <dd>
+                     <input id="nickname" type="text" class='k-textbox' data-bind="value: nickname" />
+                 </dd>
+                 <dt>Gender</dt>
+                 <dd>
+                     <select data-role="dropdownlist" data-bind="source: genders, value: gender" data-text-field="name" data-value-field="value" ></select>
+                 </dd>
+                 <dt>&nbsp;</dt>
+                 <dd>
+                     <a id="create" data-role="button" data-bind="click: create" class="k-button">Add</a>
+                 </dd>
+             </dl>
         </div>
-
+        
         <div data-role="layout" id="main-layout" data-id="main-layout">
             <header data-role="header">
                 <div data-role="navbar">
@@ -58,11 +56,49 @@
             </header>
             <footer data-role="footer">
                 <div data-role="tabstrip">
-                    <a href="#home-view" data-icon="home">Home</a>
-                    <a href="views/users-map-view.html#users-map-view" data-icon="bookmarks">People on map</a>
-                    <a href="views/users-list-view.html#users-list-view" data-icon="info">Nearby people</a>
+                    <a href="views/profile-view.html#profile-view" data-icon="home">Profile</a>
+                    <a href="views/users-map-view.html#users-map-view" data-icon="search">People on map</a>
+                    <a href="views/users-list-view.html#users-list-view" data-icon="contacts">Nearby people</a>
+                    <a href="views/meets-list-view.html#meets-list-view" data-icon="info">Meetings</a>
                 </div>
             </footer>
         </div>
+        
+        <script id="interest-template" type="text/x-kendo-template">
+            <div>
+               #: Interest #
+            </div>
+        </script>
+        
+        <script id="simple-list-template" type="text/x-kendo-template">
+            <div>
+                <div>
+                    #: Nickname #
+                </div>
+                <div>
+                    About #: Age # years
+                </div>
+                <div>
+                    #: Gender #
+                </div>
+                <div>
+                    Contacts: #: Meets #
+                </div>
+            </div>
+        </script>
+        
+        <script id="meets-list-template" type="text/x-kendo-template">
+            <div>
+                <span>
+                    #: Intro #
+                </span>
+                <span>
+                    #: Nickname #
+                </span>
+                <span style="float:right;">
+                    #: Status #
+                </span>
+            </div>
+        </script>
     </body>
 </html>

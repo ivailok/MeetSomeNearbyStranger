@@ -1,0 +1,27 @@
+<div data-role="view" id="meet-details-view" data-id="meet-details-view"
+     data-layout="main-layout" data-title="Detailed info" data-model="app.meetDetailsService.viewModel"
+     data-show="app.meetDetailsService.init">
+    <div id="meet-details">
+        <span style="display:block;">
+            Meeting: 
+            <span data-bind="text: nickname"></span>
+            <a data-role="button" data-bind="events: {click: view}">View</a>
+        </span>
+        <div>
+            Status:
+            <span data-bind="visible:isReceived">
+                <span data-bind="visible:isToBeAccepted">
+                    <span>Accept offer: </span>
+                    <a data-role="button" data-bind="events: {click: accept}">Yes</a>
+                    <a data-role="button" data-bind="events: {click: decline}">No</a>
+                </span>
+                <span data-bind="invisible:isToBeAccepted">
+                    <span data-bind="text: status"></span>
+                </span>
+            </span>
+            <span data-bind="invisible:isReceived">
+                <span data-bind="text: status"></span>
+            </span>
+        </div>
+    </div>
+</div>
